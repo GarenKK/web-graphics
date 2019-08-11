@@ -1,55 +1,59 @@
 <template>
   <div>
+    <div class="header">
+      <router-link
+        v-show="canGoBack"
+        to="/"
+        class="back">
+        <
+      </router-link>
+      <h1 class="title">{{TEXTS.APP_TITLE}}</h1>
+    </div>
     <nuxt />
   </div>
 </template>
 
+<script>
+  import TEXTS from '~/assets/texts.js'
+
+  export default {
+    data: () => ({
+      TEXTS,
+      canGoBack: false
+    }),
+    watch: {
+      '$route' (to, from) {
+        this.canGoBack = to.name != "index"
+      }
+    },
+    mounted () {
+      this.canGoBack = this.$router.history.current.name != "index"
+    }
+  }
+</script>
+
 <style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
-}
+  body {
+    margin: 0;
+  }
+  .header {
+    width: 100%;
+    background-color: green;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .back {
+    position: absolute;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 1.75rem; 
+  }
+  .back:active {
+    color: gray;
+  }
+  h1.title {
+    text-align: center;
+    margin: 0;
+  }
 </style>

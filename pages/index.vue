@@ -1,72 +1,35 @@
 <template>
-  <div class="container">
+  <div>
+    <h2 class="title">{{TEXTS.INDEX_TITLE}}</h2>
     <div>
-      <logo />
-      <h1 class="title">
-        web-graphics
-      </h1>
-      <h2 class="subtitle">
-        A vue.js/three.js web app to display and transform 3D models
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      <ModelInfo
+        v-for="model in models"
+        v-bind:key="model.name"
+        :modelData="model">
+      </ModelInfo>
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+  import ModelInfo from '~/components/ModelInfo.vue'
+  import models from '~/assets/models.js'
+  import TEXTS from '~/assets/texts.js'
 
-export default {
-  components: {
-    Logo
+  export default {
+    name: 'index',
+    data: () => ({
+      TEXTS,
+      models
+    }),
+    components: {
+      ModelInfo
+    }
   }
-}
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
+  h2.title {
+    text-align: center;
+  }
 </style>

@@ -18,3 +18,14 @@ $ npm run start
 # generate static project
 $ npm run generate
 ```
+
+## Project Description
+
+#### index page
+
+display a list of models that you can load by clicking on the chosen model
+
+#### canvas
+
+display the selected model and edit transforms
+can go back by clicking the arrow on the top left corner
