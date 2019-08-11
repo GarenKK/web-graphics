@@ -1,4 +1,5 @@
-export default [
+// instead of a backend
+let models = [
 	{
 		name: "hand",
 		uri: "/hand",
@@ -21,3 +22,12 @@ export default [
 		title: "Skull"
 	}
 ]
+
+let modelByName = function (name) {
+	return models.find( obj => obj.name == name )
+}
+
+export {
+	models,
+	modelByName
+}

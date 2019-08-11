@@ -13,7 +13,7 @@
 
 <script>
   import ModelInfo from '~/components/ModelInfo.vue'
-  import models from '~/assets/models.js'
+  import { models } from '~/assets/models.js'
   import TEXTS from '~/assets/texts.js'
 
   export default {
