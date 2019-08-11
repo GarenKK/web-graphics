@@ -11,21 +11,21 @@
 </template>
 
 <script>
-	import { modelByName } from '~/assets/models.js'
+  import { modelByName } from '~/assets/models.js'
   import ModelCanvas from '~/components/ModelCanvas.vue'
   import Controls from '~/components/Controls.vue'
 
   export default {
-  	name: 'model-viewer',
+    name: 'model-viewer',
     data: () => ({
-    	modelInfo: null
+      modelInfo: null
     }),
     components: {
       ModelCanvas,
       Controls
     },
     mounted () {
-    	this.modelInfo = modelByName(this.$route.params.model)
+      this.modelInfo = modelByName(this.$route.params.model)
     }
   }
 </script>
