@@ -46,6 +46,11 @@ export default {
     /*
     ** You can extend webpack config here
     */
+    transpile: [
+      'GLTFLoader',
+      'OrbitControls',
+      'transformControls'
+    ],
     extend (config, ctx) {
     }
   }

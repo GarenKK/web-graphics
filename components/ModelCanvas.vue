@@ -8,7 +8,6 @@
       v-show="loadingPercentage > 0 && loadingPercentage < 100">
       Loading: {{loadingPercentage}}
     </div>
-    {{path}}
   </div>
 </template>
 
@@ -16,7 +15,7 @@
   import mixins from '~/mixins/index.js'
   import * as THREE from 'three'
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-  // import { TransformControls } from 'three/examples/jsm/controls/transformControls.js'
+  import { TransformControls } from 'three/examples/jsm/controls/transformControls.js'
 
   export default {
     name: 'ModelCanvas',
@@ -66,11 +65,21 @@
         const light = new THREE.HemisphereLight( skyColor, groundColor, intensity )
         scene.add(light)
 
+        const controls = new TransformControls(camera, renderer.domElement);
+        controls.setMode( "rotate" );
+        //controls.setMode( "scale" );
+        //controls.setMode( "position" );
+        console.log("controls", controls)
+        controls.addEventListener( 'change', function (event) {
+          renderer.render( scene, camera )
+        })
+        controls.attach( modelScene )
+        scene.add( controls )
+
         renderer.render( scene, camera )
       }
 
       frameArea = ( sizeToFitOnScreen, boxSize, boxCenter, camera ) => {
-        console.log(sizeToFitOnScreen, boxSize, boxCenter)
         const halfFovY = THREE.Math.degToRad(camera.fov * .5)
         const distance = sizeToFitOnScreen / Math.tan(halfFovY)
         const direction = (new THREE.Vector3())
