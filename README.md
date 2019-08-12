@@ -27,5 +27,6 @@ display a list of models that you can load by clicking on the chosen model
 
 #### canvas
 
-display the selected model and edit transforms
-can go back by clicking the arrow on the top left corner
+display the selected model and edit transforms.
+
+can go back to index page by clicking the arrow on the top left corner.
