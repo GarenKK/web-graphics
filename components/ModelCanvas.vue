@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div
+    class="wrapper">
     <canvas
       class="my-canvas"
       ref="my-canvas">
@@ -139,6 +140,7 @@
         this.changeType = function (type) {
           controls.setMode(type)
         }
+        controls.setMode(this.type)
         controls.addEventListener( 'change', (event) => {
           let controledObj = event.target.object
           this.$store.commit('positionX', controledObj.position.x)
@@ -179,10 +181,15 @@
   }
 </script>
 
-<style>
-  .my-canvas {
-    height: 100%;
-    width: 60%;
+<style scoped>
+  .wrapper {
+    display: flex;
+    justify-content: center;
     background-color: black;
+  }
+
+  .my-canvas {
+    display: block;
+    height: 100%;
   }
 </style>

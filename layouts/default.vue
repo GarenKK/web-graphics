@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div
+    class="main">
     <div class="header">
       <router-link
         v-show="canGoBack"
@@ -9,7 +10,8 @@
       </router-link>
       <h1 class="title">{{TEXTS.APP_TITLE}}</h1>
     </div>
-    <nuxt />
+    <nuxt
+      class="content"/>
   </div>
 </template>
 
@@ -33,15 +35,39 @@
 </script>
 
 <style>
+  html,
+  body,
+  #__nuxt,
+  #__layout {
+    height: 100%;
+  }
+
   body {
     margin: 0;
   }
+</style>
+
+<style scoped>
+  .main {
+    height: 100%;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content {
+    flex: 1;
+  }
+
   .header {
     width: 100%;
     background-color: green;
     padding: 10px;
     box-sizing: border-box;
   }
+
   .back {
     position: absolute;
     text-decoration: none;
@@ -49,9 +75,11 @@
     font-weight: bold;
     font-size: 1.75rem; 
   }
+
   .back:active {
     color: gray;
   }
+
   h1.title {
     text-align: center;
     margin: 0;

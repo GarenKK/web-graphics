@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div v-if="modelInfo">
+    <div
+      v-if="modelInfo"
+      class="wrapper">
       <ModelCanvas :path="modelInfo.path"></ModelCanvas>
       <Controls></Controls>
     </div>
@@ -30,5 +32,9 @@
   }
 </script>
 
-<style>
+<style scoped>
+  .wrapper {
+    position: relative;
+    height: 100%;
+  }
 </style>
