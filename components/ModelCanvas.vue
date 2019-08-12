@@ -20,12 +20,78 @@
   export default {
     name: 'ModelCanvas',
     data: () => ({
-      loadingPercentage: 0
+      loadingPercentage: 0,
+      update: null,
+      changeType: null
     }),
     props: {
       path: String
     },
     mixins: [mixins],
+    computed: {
+      type () {
+        return this.$store.getters.type
+      },
+      positionX () {
+        return this.$store.getters.positionX
+      },
+      positionY () {
+        return this.$store.getters.positionY
+      },
+      positionZ () {
+        return this.$store.getters.positionZ
+      },
+      rotationX () {
+        return this.$store.getters.rotationX
+      },
+      rotationY () {
+        return this.$store.getters.rotationY
+      },
+      rotationZ () {
+        return this.$store.getters.rotationZ
+      },
+      scaleX () {
+        return this.$store.getters.scaleX
+      },
+      scaleY () {
+        return this.$store.getters.scaleY
+      },
+      scaleZ () {
+        return this.$store.getters.scaleZ
+      }
+    },
+    watch: {
+      type (newValue, oldValue) {
+        this.changeType(newValue)
+      },
+      positionX (newValue, oldValue) {
+        this.update("position", "x", newValue)
+      },
+      positionY (newValue, oldValue) {
+        this.update("position", "y", newValue)
+      },
+      positionZ (newValue, oldValue) {
+        this.update("position", "z", newValue)
+      },
+      rotationX (newValue, oldValue) {
+        this.update("rotation", "x", newValue)
+      },
+      rotationY (newValue, oldValue) {
+        this.update("rotation", "y", newValue)
+      },
+      rotationZ (newValue, oldValue) {
+        this.update("rotation", "z", newValue)
+      },
+      scaleX (newValue, oldValue) {
+        this.update("scale", "x", newValue)
+      },
+      scaleY (newValue, oldValue) {
+        this.update("scale", "y", newValue)
+      },
+      scaleZ (newValue, oldValue) {
+        this.update("scale", "z", newValue)
+      }
+    },
     mounted () {
       let loader, onLoad, onProgress, onError, frameArea
       loader = new GLTFLoader();
@@ -66,11 +132,24 @@
         scene.add(light)
 
         const controls = new TransformControls(camera, renderer.domElement);
-        controls.setMode( "rotate" );
-        //controls.setMode( "scale" );
-        //controls.setMode( "position" );
-        console.log("controls", controls)
-        controls.addEventListener( 'change', function (event) {
+        this.update = function (type, axis, value) {
+          controls.object[type][axis] = value
+          renderer.render( scene, camera )
+        }
+        this.changeType = function (type) {
+          controls.setMode(type)
+        }
+        controls.addEventListener( 'change', (event) => {
+          let controledObj = event.target.object
+          this.$store.commit('positionX', controledObj.position.x)
+          this.$store.commit('positionY', controledObj.position.y)
+          this.$store.commit('positionZ', controledObj.position.z)
+          this.$store.commit('rotationX', controledObj.rotation.x)
+          this.$store.commit('rotationY', controledObj.rotation.y)
+          this.$store.commit('rotationZ', controledObj.rotation.z)
+          this.$store.commit('scaleX', controledObj.scale.x)
+          this.$store.commit('scaleY', controledObj.scale.y)
+          this.$store.commit('scaleZ', controledObj.scale.z)
           renderer.render( scene, camera )
         })
         controls.attach( modelScene )
@@ -86,7 +165,7 @@
             .subVectors({x:1, y:0, z:0}, boxCenter)
             .multiply(new THREE.Vector3(1, 0, 1))
             .normalize()
-        // move the camera to a position distance units way from the center
+        // move the camera to a position distance units away from the center
         camera.position.copy(direction.multiplyScalar(distance).add(boxCenter))
         // pick some near and far values for the frustum that will contain the box.
         camera.near = boxSize / 100
