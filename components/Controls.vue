@@ -3,7 +3,7 @@
     class="main">
     <div
       class="actions">
-      <div class="actions-title">Mouse Actions</div>
+      <div class="actions-title">{{TEXTS.CANVAS_TITLE}}</div>
       <div
         class="btns">
         <div
@@ -44,6 +44,8 @@
 </template>
 
 <script>
+  import TEXTS from '~/assets/texts.js'
+
   export default {
     name: 'Controls',
     data () {
@@ -51,6 +53,7 @@
       const transformType = ['position', 'rotation', 'scale']
       const transformAxis = ['X', 'Y', 'Z']
       return {
+        TEXTS,
         actions,
         transformType,
         transformAxis,

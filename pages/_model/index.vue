@@ -3,7 +3,13 @@
     <div
       v-if="modelInfo"
       class="wrapper">
-      <ModelCanvas :path="modelInfo.path"></ModelCanvas>
+      <ModelCanvas
+        :path="modelInfo.path"
+        :lightIntensity="modelInfo.light"
+        :hasVideo="modelInfo.hasVideo"
+        :meshIndex="modelInfo.meshIndex"
+        :meshLocation="modelInfo.meshLocation"> <!-- EXPERIMENTAL VIDEO FEATURE -->
+        </ModelCanvas>
       <Controls></Controls>
     </div>
     <div v-else>

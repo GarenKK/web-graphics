@@ -9,6 +9,19 @@
       v-show="loadingPercentage > 0 && loadingPercentage < 100">
       Loading: {{loadingPercentage}}
     </div>
+    <!-- EXPERIMENTAL VIDEO FEATURE -->
+    <video ref="my-video" id="my-video" loop crossOrigin="anonymous" webkit-playsinline style="display:none">
+      <source src="/models/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
+      <source src="/models/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
+    <button
+      v-if="hasVideo"
+      v-show="showButton"
+      class="video-button"
+      @click="playVideo()">
+      PLAY VIDEO
+    </button>
+    <!-- EXPERIMENTAL VIDEO FEATURE -->
   </div>
 </template>
 
@@ -23,12 +36,23 @@
     data: () => ({
       loadingPercentage: 0,
       update: null,
-      changeType: null
+      changeType: null,
+      playVideo: function () {},
+      showButton: true
     }),
     props: {
-      path: String
+      path: String,
+      lightIntensity: Number,
+      hasVideo: Boolean,
+      meshIndex: Array,
+      meshLocation: Array
     },
     mixins: [mixins],
+    // EXPERIMENTAL VIDEO FEATURE
+    beforeDestroy () {
+      this.$refs["my-video"].pause();
+    },
+    // EXPERIMENTAL VIDEO FEATURE
     computed: {
       type () {
         return this.$store.getters.type
@@ -114,6 +138,42 @@
         let scene = new THREE.Scene()
         scene.add(modelScene)
 
+        // EXPERIMENTAL VIDEO FEATURE
+        if (this.hasVideo) {
+          this.playVideo = function () {
+            let myVideo = this.$refs["my-video"]
+            myVideo.play()
+            this.showButton = false
+
+            let findMeshParent = ( scene ) => {
+              this.meshLocation.forEach( (locationIndex) => {
+                scene = scene.children[locationIndex]
+              });
+              return scene
+            }
+            let texture = new THREE.VideoTexture( myVideo )
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+            texture.format = THREE.RGBFormat;
+            let parameters = { color: 0xffffff, map: texture };
+            let material = new THREE.MeshLambertMaterial( parameters )
+            let meshParent = findMeshParent(modelScene)
+            if (this.meshIndex.length === 1) {
+              meshParent.children[this.meshIndex[0]].children[0].material.map = texture
+            } else {
+              this.meshIndex.forEach( (meshIndex) => {
+                meshParent.children[meshIndex].children[0].material = material
+              });
+            }
+          }
+        }
+        // EXPERIMENTAL VIDEO FEATURE
+
+        let mixer = new THREE.AnimationMixer( modelScene );
+        object.animations.forEach(( clip ) => {
+          mixer.clipAction(clip).play();
+        });
+
         const fov = 75
         const aspect = canvas.clientWidth / canvas.clientHeight
         const near = 0.1
@@ -127,9 +187,7 @@
 
         const skyColor = 0xB1E1FF // light blue
         const groundColor = 0xB97A20  // brownish orange
-         //intensify light proportionally to object size (minimum 2)
-        const intensity = boxSize < 200 ? 2 : boxSize / 100
-        const light = new THREE.HemisphereLight( skyColor, groundColor, intensity )
+        const light = new THREE.HemisphereLight( skyColor, groundColor, this.lightIntensity )
         scene.add(light)
 
         const controls = new TransformControls(camera, renderer.domElement);
@@ -157,7 +215,12 @@
         controls.attach( modelScene )
         scene.add( controls )
 
-        renderer.render( scene, camera )
+        function animate() {
+          requestAnimationFrame( animate );
+          mixer.update( 0.01 );
+          renderer.render( scene, camera );
+        }
+        animate();
       }
 
       frameArea = ( sizeToFitOnScreen, boxSize, boxCenter, camera ) => {
@@ -191,5 +254,11 @@
   .my-canvas {
     display: block;
     height: 100%;
+  }
+
+  .video-button {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
   }
 </style>
